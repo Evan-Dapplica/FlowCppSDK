@@ -298,4 +298,4 @@ The gas limit depends on the complexity of the transaction script. Until dedicat
 A transaction will be rejected if it is submitted past its expiry block. Flow calculates transaction expiry using the _reference block_ field on a transaction.
 A transaction expires after `600` blocks are committed on top of the reference block, which takes about 10 minutes at average Mainnet block rates.
 
-
+Note: this is not implement yet.
