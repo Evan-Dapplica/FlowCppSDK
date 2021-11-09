@@ -78,22 +78,20 @@ Query the network for block by id, height or get the latest block.
 
 This example depicts ways to get the latest block as well as any other block by height or ID:
 
-```
-    BlockResponse block_reply;
+```cpp
+BlockResponse block_reply;
 
-    if(!(client.GetLatestBlock(true, block_reply).ok()))
-    {
-        std::cout << "Error reading latest block";
-        return;
-    }
-	
-	id = block_reply.block().id();
-	height  = block_reply.block().height()
-	
-	client.GetBlockByHeight(height,block_reply).....
-	client.GetBlockByID(id, block_reply)....
-	
-	
+if(!(client.GetLatestBlock(true, block_reply).ok()))
+{
+	std::cout << "Error reading latest block";
+	return;
+}
+
+id = block_reply.block().id();
+height  = block_reply.block().height()
+
+client.GetBlockByHeight(height,block_reply) //.....
+client.GetBlockByID(id, block_reply )//....
 ```
 Result output:
 ```bash
@@ -115,14 +113,13 @@ An account includes the following data:
 
 #### Examples
 Example depicts ways to get an account at the latest block and at a specific block height:
-```
+```cpp
+GetAccountResponse account_reply;
 
-    GetAccountResponse account_reply;
-    
-    if(!client.GetAccount("0x877d3e50c611fc87",account_reply).ok())
-    {
-        std::cout << "Error reading account by address" << std::endl;
-    }
+if(!client.GetAccount("0x877d3e50c611fc87",account_reply).ok())
+{
+	std::cout << "Error reading account by address" << std::endl;
+}
 ```
 Result output:
 ```bash
@@ -152,7 +149,7 @@ Retrieve transactions from the network by providing a transaction ID. After a tr
 
 
 
-```
+```cpp
 TransactionResponse transaction_reply;
 
 if(!client.GetTransaction("4aca30e1bf4eb6cd5c1bf48bbcd69a66de63e54f954092e6ec51bc95c6fed7f6",transaction_reply).ok())
@@ -183,7 +180,7 @@ core events, and you should read more about them in [this document](https://docs
 #### Examples
 Example depicts ways to get events within block range or by block IDs:
 
-```
+```cpp
 EventsResponse events_reply;
 
 if(!client.GetEventsForHeightRange("A.7e60df042a9c0868.FlowToken.TokensWithdrawn", 50157100, 50157101,events_reply).ok())
@@ -205,7 +202,7 @@ Collections are used to improve consensus throughput by increasing the number of
 📖 **Collection ID** is SHA3-256 hash of the collection payload.
 
 Example retrieving a collection:
-```
+```cpp
 CollectionResponse collection_reply;
 
 if(!client.GetCollectionByID("f2a15028f4502c088d5460f1f086b65c0a71bb3da44bde6c6c5dcce254ddf849",collection_reply).ok())
