@@ -93,10 +93,6 @@ height  = block_reply.block().height()
 client.GetBlockByHeight(height,block_reply) //.....
 client.GetBlockByID(id, block_reply )//....
 ```
-Result output:
-```bash
-// TODO example result
-```
 
 ### Get Account
 [<img src="https://raw.githubusercontent.com/onflow/sdks/main/templates/documentation/ref.svg" width="130">](https://github.com/Evan-Dapplica/FlowCppSDK)
@@ -121,11 +117,6 @@ if(!client.GetAccount("0x877d3e50c611fc87",account_reply).ok())
 	std::cout << "Error reading account by address" << std::endl;
 }
 ```
-Result output:
-```bash
-// TODO get account result
-```
-
 
 ### Get Transactions
 [<img src="https://raw.githubusercontent.com/onflow/sdks/main/templates/documentation/ref.svg" width="130">](https://github.com/Evan-Dapplica/FlowCppSDK) 
@@ -157,11 +148,6 @@ if(!client.GetTransaction("4aca30e1bf4eb6cd5c1bf48bbcd69a66de63e54f954092e6ec51b
 	std::cout << "Error reading transaction" << std::endl;
 }
 ```
-Example output:
-```bash
-// TODO example output
-```
-
 
 ### Get Events
 [<img src="https://raw.githubusercontent.com/onflow/sdks/main/templates/documentation/ref.svg" width="130">](https://github.com/Evan-Dapplica/FlowCppSDK) 
@@ -188,10 +174,6 @@ if(!client.GetEventsForHeightRange("A.7e60df042a9c0868.FlowToken.TokensWithdrawn
 	std::cout << "Error reading events" << std::endl;
 }
 ```
-Example output:
-```bash
-// TODO event example output
-```
 
 ### Get Collections
 [<img src="https://raw.githubusercontent.com/onflow/sdks/main/templates/documentation/ref.svg" width="130">](https://github.com/Evan-Dapplica/FlowCppSDK)
@@ -209,10 +191,6 @@ if(!client.GetCollectionByID("f2a15028f4502c088d5460f1f086b65c0a71bb3da44bde6c6c
 {
 	std::cout << "Error reading collection" << std::endl;
 }
-```
-Example output:
-```bash
-// TODO collection example
 ```
 
 ### Execute Scripts
@@ -235,10 +213,6 @@ if(!client.ExecuteScriptAtLatestBlock(script,{},executing_reply).ok())
 {
 	std::cout << "Error executing script" << std::endl;
 }
-```
-Example output:
-```bash
-// TODO example output
 ```
 
 ## Mutate Flow Network
