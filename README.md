@@ -35,9 +35,6 @@ The library client specifications can be found here:
 
 `make`
 
-### Importing the Library
-// TODO import instructions here
-
 ## Connect
 [<img src="https://raw.githubusercontent.com/onflow/sdks/main/templates/documentation/ref.svg" width="130">](https://github.com/Evan-Dapplica/FlowCppSDK) 
 
