@@ -16,39 +16,57 @@ SDKs are open source, and you can use them according to the licence.
 
 The library client specifications can be found here:
 
-// TODO specs here
-[<img src="https://raw.githubusercontent.com/onflow/sdks/main/templates/documentation/ref.svg" width="130">]()
+
+[<img src="https://raw.githubusercontent.com/onflow/sdks/main/templates/documentation/ref.svg" width="130">](https://github.com/Evan-Dapplica/FlowCppSDK)
 
 
 ## Getting Started
 
 ### Installing
-// TODO install instructions here
+
+
+`git clone https://github.com/Evan-Dapplica/FlowCppSDK.git` 
+
+`cd FlowCppSDK` 
+
+`mkdir -p cmake/build`
+
+`cd cmake/build`
+
+`cmake ../..`
+
+`make`
 
 ### Importing the Library
 // TODO import instructions here
 
 ## Connect
-[<img src="https://raw.githubusercontent.com/onflow/sdks/main/templates/documentation/ref.svg" width="130">]() // TODO specs here
+[<img src="https://raw.githubusercontent.com/onflow/sdks/main/templates/documentation/ref.svg" width="130">](https://github.com/Evan-Dapplica/FlowCppSDK) 
 
 The library uses gRPC to communicate with the access nodes and it must be configured with correct access node API URL. 
 
 📖 **Access API URLs** can be found [here](https://docs.onflow.org/access-api/#flow-access-node-endpoints). An error will be returned if the host is unreachable.
 The Access Nodes APIs hosted by DapperLabs are accessible at:
 - Testnet `access.devnet.nodes.onflow.org:9000`
+
 - Mainnet `access.mainnet.nodes.onflow.org:9000`
+
 - Local Emulator `127.0.0.1:3569` 
 
 Example:
 ```
-// TODO connect example here
+std::string target_address("access.mainnet.nodes.onflow.org:9000");
+FlowClient client(grpc::CreateChannel(target_address, grpc::InsecureChannelCredentials()));
+
+client.Ping();
+
 ```
 
 ## Querying the Flow Network
 After you have established a connection with an access node, you can query the Flow network to retrieve data about blocks, accounts, events and transactions. We will explore how to retrieve each of these entities in the sections below.
 
 ### Get Blocks
-[<img src="https://raw.githubusercontent.com/onflow/sdks/main/templates/documentation/ref.svg" width="130">]() // TODO specs here
+[<img src="https://raw.githubusercontent.com/onflow/sdks/main/templates/documentation/ref.svg" width="130">](https://github.com/Evan-Dapplica/FlowCppSDK)
 
 Query the network for block by id, height or get the latest block.
 
@@ -60,9 +78,22 @@ Query the network for block by id, height or get the latest block.
 
 This example depicts ways to get the latest block as well as any other block by height or ID:
 
-**[<img src="https://raw.githubusercontent.com/onflow/sdks/main/templates/documentation/try.svg" width="130">]()** // TODO link to example
 ```
-// TODO example to get blocks
+    BlockResponse block_reply;
+
+    if(!(client.GetLatestBlock(true, block_reply).ok()))
+    {
+        std::cout << "Error reading latest block";
+        return;
+    }
+	
+	id = block_reply.block().id();
+	height  = block_reply.block().height()
+	
+	client.GetBlockByHeight(height,block_reply).....
+	client.GetBlockByID(id, block_reply)....
+	
+	
 ```
 Result output:
 ```bash
@@ -70,7 +101,7 @@ Result output:
 ```
 
 ### Get Account
-[<img src="https://raw.githubusercontent.com/onflow/sdks/main/templates/documentation/ref.svg" width="130">]() // TODO specs here
+[<img src="https://raw.githubusercontent.com/onflow/sdks/main/templates/documentation/ref.svg" width="130">](https://github.com/Evan-Dapplica/FlowCppSDK)
 
 Retrieve any account from Flow network's latest block or from a specified block height.
 
@@ -84,10 +115,14 @@ An account includes the following data:
 
 #### Examples
 Example depicts ways to get an account at the latest block and at a specific block height:
-
-**[<img src="https://raw.githubusercontent.com/onflow/sdks/main/templates/documentation/try.svg" width="130">]()** // TODO example link
 ```
-// TODO get example 
+
+    GetAccountResponse account_reply;
+    
+    if(!client.GetAccount("0x877d3e50c611fc87",account_reply).ok())
+    {
+        std::cout << "Error reading account by address" << std::endl;
+    }
 ```
 Result output:
 ```bash
@@ -96,7 +131,7 @@ Result output:
 
 
 ### Get Transactions
-[<img src="https://raw.githubusercontent.com/onflow/sdks/main/templates/documentation/ref.svg" width="130">]() // TODO specs here
+[<img src="https://raw.githubusercontent.com/onflow/sdks/main/templates/documentation/ref.svg" width="130">](https://github.com/Evan-Dapplica/FlowCppSDK) 
 
 Retrieve transactions from the network by providing a transaction ID. After a transaction has been submitted, you can also get the transaction result to check the status.
 
@@ -116,9 +151,14 @@ Retrieve transactions from the network by providing a transaction ID. After a tr
 |   EXPIRED    |   ✅     |  The transaction reference block is outdated before being executed    |
 
 
-**[<img src="https://raw.githubusercontent.com/onflow/sdks/main/templates/documentation/try.svg" width="130">]()** // TODO example link
+
 ```
-// TODO get transaction example
+TransactionResponse transaction_reply;
+
+if(!client.GetTransaction("4aca30e1bf4eb6cd5c1bf48bbcd69a66de63e54f954092e6ec51bc95c6fed7f6",transaction_reply).ok())
+{
+	std::cout << "Error reading transaction" << std::endl;
+}
 ```
 Example output:
 ```bash
@@ -127,8 +167,7 @@ Example output:
 
 
 ### Get Events
-[<img src="https://raw.githubusercontent.com/onflow/sdks/main/templates/documentation/ref.svg" width="130">]() // TODO specs here
-
+[<img src="https://raw.githubusercontent.com/onflow/sdks/main/templates/documentation/ref.svg" width="130">](https://github.com/Evan-Dapplica/FlowCppSDK) 
 Retrieve events by a given type in a specified block height range or through a list of block IDs.
 
 📖 **Event type** is a string that follow a standard format:
@@ -144,9 +183,13 @@ core events, and you should read more about them in [this document](https://docs
 #### Examples
 Example depicts ways to get events within block range or by block IDs:
 
-**[<img src="https://raw.githubusercontent.com/onflow/sdks/main/templates/documentation/try.svg" width="130">]()** // TODO example link
 ```
-// TODO get events example
+EventsResponse events_reply;
+
+if(!client.GetEventsForHeightRange("A.7e60df042a9c0868.FlowToken.TokensWithdrawn", 50157100, 50157101,events_reply).ok())
+{
+	std::cout << "Error reading events" << std::endl;
+}
 ```
 Example output:
 ```bash
@@ -154,7 +197,7 @@ Example output:
 ```
 
 ### Get Collections
-[<img src="https://raw.githubusercontent.com/onflow/sdks/main/templates/documentation/ref.svg" width="130">]() // TODO specs here
+[<img src="https://raw.githubusercontent.com/onflow/sdks/main/templates/documentation/ref.svg" width="130">](https://github.com/Evan-Dapplica/FlowCppSDK)
 
 Retrieve a batch of transactions that have been included in the same block, known as ***collections***. 
 Collections are used to improve consensus throughput by increasing the number of transactions per block and they act as a link between a block and a transaction.
@@ -162,8 +205,13 @@ Collections are used to improve consensus throughput by increasing the number of
 📖 **Collection ID** is SHA3-256 hash of the collection payload.
 
 Example retrieving a collection:
-```go
-// TODO get collection
+```
+CollectionResponse collection_reply;
+
+if(!client.GetCollectionByID("f2a15028f4502c088d5460f1f086b65c0a71bb3da44bde6c6c5dcce254ddf849",collection_reply).ok())
+{
+	std::cout << "Error reading collection" << std::endl;
+}
 ```
 Example output:
 ```bash
