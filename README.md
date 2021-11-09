@@ -4,8 +4,6 @@
   <p align="center"> <br />
     <a href="https://github.com/Evan-Dapplica/FlowCppSDK"><strong>View on GitHub »</strong></a> <br /><br />
     <a href="https://docs.onflow.org/sdk-guidelines/">SDK Specifications</a> ·
-    <a href="">Contribute</a> ·
-    <a href="">Report a Bug</a>
   </p>
 </div><br />
 
