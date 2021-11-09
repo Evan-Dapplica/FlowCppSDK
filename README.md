@@ -1,7 +1,7 @@
 <br />
 <div align="center">
   <a href="">
-    <img src="./" alt="FLowCppSDK" width="300" height="auto">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/1/18/ISO_C%2B%2B_Logo.svg" alt="FLowCppSDK" width="300" height="auto">
   </a>
   <p align="center"> <br />
     <a href="https://github.com/Evan-Dapplica/FlowCppSDK"><strong>View on GitHub »</strong></a> <br /><br />
