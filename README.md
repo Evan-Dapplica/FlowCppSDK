@@ -3,7 +3,7 @@
     <img src="https://upload.wikimedia.org/wikipedia/commons/1/18/ISO_C%2B%2B_Logo.svg" width="300" height="auto">
   <p align="center"> <br />
     <a href="https://github.com/Evan-Dapplica/FlowCppSDK"><strong>View on GitHub »</strong></a> <br /><br />
-    <a href="https://docs.onflow.org/sdk-guidelines/">SDK Specifications</a> ·
+    <a href="https://docs.onflow.org/sdk-guidelines/">SDK Specifications</a>
   </p>
 </div><br />
 
