@@ -216,7 +216,7 @@ Example output:
 ```
 
 ### Execute Scripts
-[<img src="https://raw.githubusercontent.com/onflow/sdks/main/templates/documentation/ref.svg" width="130">]() // TODO specs here
+[<img src="https://raw.githubusercontent.com/onflow/sdks/main/templates/documentation/ref.svg" width="130">](https://github.com/Evan-Dapplica/FlowCppSDK) 
 
 Scripts allow you to write arbitrary non-mutating Cadence code on the Flow blockchain and return data. You can learn more about [Cadence and scripts here](https://docs.onflow.org/cadence/language/), but we are now only interested in executing the script code and getting back the data.
 
@@ -226,34 +226,15 @@ We can execute a script using the latest state of the Flow blockchain or we can 
 
 📖 **Block height** expresses the height of the block in the chain.
 
-**[<img src="https://raw.githubusercontent.com/onflow/sdks/main/templates/documentation/try.svg" width="130">]()** // TODO example link
-```
-// simple script
-pub fun main(a: Int): Int {
-    return a + 10
-}
-// complex script
-pub struct User {
-    pub var balance: UFix64
-    pub var address: Address
-    pub var name: String
 
-    init(name: String, address: Address, balance: UFix64) {
-        self.name = name
-        self.address = address
-        self.balance = balance
-    }
-}
+```cpp
+ExecuteScriptResponse executing_reply;
+const char* script = "pub fun main(): Int {return 1 + 2}";
 
-pub fun main(name: String): User {
-    return User(
-        name: name,
-        address: 0x1,
-        balance: 10.0
-    )
+if(!client.ExecuteScriptAtLatestBlock(script,{},executing_reply).ok())
+{
+	std::cout << "Error executing script" << std::endl;
 }
-
-// TODO example for above scripts
 ```
 Example output:
 ```bash
@@ -317,205 +298,4 @@ The gas limit depends on the complexity of the transaction script. Until dedicat
 A transaction will be rejected if it is submitted past its expiry block. Flow calculates transaction expiry using the _reference block_ field on a transaction.
 A transaction expires after `600` blocks are committed on top of the reference block, which takes about 10 minutes at average Mainnet block rates.
 
-### Build Transactions
-[<img src="https://raw.githubusercontent.com/onflow/sdks/main/templates/documentation/ref.svg" width="130">]() // TODO specs here
 
-Building a transaction involves setting the required properties explained above and producing a transaction object. 
-
-Here we define a simple transaction script that will be used to execute on the network and serve as a good learning example.
-
-```
-transaction(greeting: String) {
-
-  let guest: Address
-
-  prepare(authorizer: AuthAccount) {
-    self.guest = authorizer.address
-  }
-
-  execute {
-    log(greeting.concat(",").concat(self.guest.toString()))
-  }
-}
-```
-
-**[<img src="https://raw.githubusercontent.com/onflow/sdks/main/templates/documentation/try.svg" width="130">]()** // TODO example link
-```go
-// TODO example for building a transaction
-```
-
-After you have successfully [built a transaction](#build-transactions) the next step in the process is to sign it.
-
-### Sign Transactions
-[<img src="https://raw.githubusercontent.com/onflow/sdks/main/templates/documentation/ref.svg" width="130">]() // TODO specs here
-
-Flow introduces new concepts that allow for more flexibility when creating and signing transactions.
-Before trying the examples below, we recommend that you read through the [transaction signature documentation](https://docs.onflow.org/concepts/accounts-and-keys/).
-
-After you have successfully [built a transaction](#build-transactions) the next step in the process is to sign it. Flow transactions have envelope and payload signatures, and you should learn about each in the [signature documentation](https://docs.onflow.org/concepts/accounts-and-keys/#anatomy-of-a-transaction).
-
-Quick example of building a transaction:
-```
-// TODO short example to build transaction
-```
-
-Signatures can be generated more securely using keys stored in a hardware device such as an [HSM](https://en.wikipedia.org/wiki/Hardware_security_module). The `crypto.Signer` interface is intended to be flexible enough to support a variety of signer implementations and is not limited to in-memory implementations.
-
-Simple signature example:
-```
-// TODO signature example
-```
-
-Flow supports great flexibility when it comes to transaction signing, we can define multiple authorizers (multi-sig transactions) and have different payer account than proposer. We will explore advanced signing scenarios bellow.
-
-### [Single party, single signature](https://docs.onflow.org/concepts/transaction-signing/#single-party-single-signature)
-
-- Proposer, payer and authorizer are the same account (`0x01`).
-- Only the envelope must be signed.
-- Proposal key must have full signing weight.
-
-| Account | Key ID | Weight |
-| ------- | ------ | ------ |
-| `0x01`  | 1      | 1.0    |
-
-**[<img src="https://raw.githubusercontent.com/onflow/sdks/main/templates/documentation/try.svg" width="130">](https://github.com/onflow/flow-go-sdk/tree/master/examples#single-party-single-signature)**
-```
-// TODO example
-```
-
-
-### [Single party, multiple signatures](https://docs.onflow.org/concepts/transaction-signing/#single-party-multiple-signatures)
-
-- Proposer, payer and authorizer are the same account (`0x01`).
-- Only the envelope must be signed.
-- Each key has weight 0.5, so two signatures are required.
-
-| Account | Key ID | Weight |
-| ------- | ------ | ------ |
-| `0x01`  | 1      | 0.5    |
-| `0x01`  | 2      | 0.5    |
-
-**[<img src="https://raw.githubusercontent.com/onflow/sdks/main/templates/documentation/try.svg" width="130">](https://github.com/onflow/flow-go-sdk/tree/master/examples#single-party-multiple-signatures)**
-```
-// TODO example
-```
-
-### [Multiple parties](https://docs.onflow.org/concepts/transaction-signing/#multiple-parties)
-
-- Proposer and authorizer are the same account (`0x01`).
-- Payer is a separate account (`0x02`).
-- Account `0x01` signs the payload.
-- Account `0x02` signs the envelope.
-    - Account `0x02` must sign last since it is the payer.
-
-| Account | Key ID | Weight |
-| ------- | ------ | ------ |
-| `0x01`  | 1      | 1.0    |
-| `0x02`  | 3      | 1.0    |
-
-**[<img src="https://raw.githubusercontent.com/onflow/sdks/main/templates/documentation/try.svg" width="130">](https://github.com/onflow/flow-go-sdk/tree/master/examples#multiple-parties)**
-```
-// TODO example
-```
-
-### [Multiple parties, two authorizers](https://docs.onflow.org/concepts/transaction-signing/#multiple-parties)
-
-- Proposer and authorizer are the same account (`0x01`).
-- Payer is a separate account (`0x02`).
-- Account `0x01` signs the payload.
-- Account `0x02` signs the envelope.
-    - Account `0x02` must sign last since it is the payer.
-- Account `0x02` is also an authorizer to show how to include two AuthAccounts into an transaction
-
-| Account | Key ID | Weight |
-| ------- | ------ | ------ |
-| `0x01`  | 1      | 1.0    |
-| `0x02`  | 3      | 1.0    |
-
-**[<img src="https://raw.githubusercontent.com/onflow/sdks/main/templates/documentation/try.svg" width="130">](https://github.com/onflow/flow-go-sdk/tree/master/examples#multiple-parties-two-authorizers)**
-```
-// TODO example
-```
-
-### [Multiple parties, multiple signatures](https://docs.onflow.org/concepts/transaction-signing/#multiple-parties)
-
-- Proposer and authorizer are the same account (`0x01`).
-- Payer is a separate account (`0x02`).
-- Account `0x01` signs the payload.
-- Account `0x02` signs the envelope.
-    - Account `0x02` must sign last since it is the payer.
-- Both accounts must sign twice (once with each of their keys).
-
-| Account | Key ID | Weight |
-| ------- | ------ | ------ |
-| `0x01`  | 1      | 0.5    |
-| `0x01`  | 2      | 0.5    |
-| `0x02`  | 3      | 0.5    |
-| `0x02`  | 4      | 0.5    |
-
-**[<img src="https://raw.githubusercontent.com/onflow/sdks/main/templates/documentation/try.svg" width="130">]()** // TODO example link
-```
-// TODO example
-```
-
-
-### Send Transactions
-[<img src="https://raw.githubusercontent.com/onflow/sdks/main/templates/documentation/ref.svg" width="130">]() // TODO reference here
-
-After a transaction has been [built](#build-transactions) and [signed](#sign-transactions), it can be sent to the Flow blockchain where it will be executed. If sending was successful you can then [retrieve the transaction result](#get-transactions).
-
-
-**[<img src="https://raw.githubusercontent.com/onflow/sdks/main/templates/documentation/try.svg" width="130">]()** // TODO example here
-```
-// TODO send transaction example
-```
-
-
-### Create Accounts
-[<img src="https://raw.githubusercontent.com/onflow/sdks/main/templates/documentation/ref.svg" width="130">]() // TODO reference here
-
-On Flow, account creation happens inside a transaction. Because the network allows for a many-to-many relationship between public keys and accounts, it's not possible to derive a new account address from a public key offline. 
-
-The Flow VM uses a deterministic address generation algorithm to assign account addresses on chain. You can find more details about address generation in the [accounts & keys documentation](https://docs.onflow.org/concepts/accounts-and-keys/).
-
-#### Public Key
-Flow uses ECDSA key pairs to control access to user accounts. Each key pair can be used in combination with the SHA2-256 or SHA3-256 hashing algorithms.
-
-⚠️ You'll need to authorize at least one public key to control your new account.
-
-Flow represents ECDSA public keys in raw form without additional metadata. Each key is a single byte slice containing a concatenation of its X and Y components in big-endian byte form.
-
-A Flow account can contain zero (not possible to control) or more public keys, referred to as account keys. Read more about [accounts in the documentation](https://docs.onflow.org/concepts/accounts-and-keys/#accounts).
-
-An account key contains the following data:
-- Raw public key (described above)
-- Signature algorithm
-- Hash algorithm
-- Weight (integer between 0-1000)
-
-Account creation happens inside a transaction, which means that somebody must pay to submit that transaction to the network. We'll call this person the account creator. Make sure you have read [sending a transaction section](#send-transactions) first. 
-
-```
-// TODO create account example
-```
-
-After the account creation transaction has been submitted you can retrieve the new account address by [getting the transaction result](#get-transactions). 
-
-The new account address will be emitted in a system-level `flow.AccountCreated` event.
-
-```
-// TODO get new account address
-```
-
-### Generate Keys
-[<img src="https://raw.githubusercontent.com/onflow/sdks/main/templates/documentation/ref.svg" width="130">]() // TODO reference here
-
-Flow uses [ECDSA](https://en.wikipedia.org/wiki/Elliptic_Curve_Digital_Signature_Algorithm) signatures to control access to user accounts. Each key pair can be used in combination with the `SHA2-256` or `SHA3-256` hashing algorithms.
-
-Here's how to generate an ECDSA private key for the P-256 (secp256r1) curve.
-
-```
-// TODO generate key example
-```
-
-The example above uses an ECDSA key pair on the P-256 (secp256r1) elliptic curve. Flow also supports the secp256k1 curve used by Bitcoin and Ethereum. Read more about [supported algorithms here](https://docs.onflow.org/concepts/accounts-and-keys/#supported-signature--hash-algorithms).
