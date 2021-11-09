@@ -54,7 +54,7 @@ The Access Nodes APIs hosted by DapperLabs are accessible at:
 - Local Emulator `127.0.0.1:3569` 
 
 Example:
-```
+```cpp
 std::string target_address("access.mainnet.nodes.onflow.org:9000");
 FlowClient client(grpc::CreateChannel(target_address, grpc::InsecureChannelCredentials()));
 
